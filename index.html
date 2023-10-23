@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+
+      #openFileButtonId[disabled] {
+        background-color: gray; /* Background color for the disabled state */
+        color: rgba(0, 0, 0, 0.5); /* Reduced opacity for the text */
+        cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+      }
+
+      #compareButton[disabled] {
+        background-color: solid gray; /* Background color for the disabled state */
+        color: rgba(0, 0, 0, 0.5); /* Reduced opacity for the text */
+        cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+      }
+
+      #refreshButton[disabled] {
+        background-color: solid gray; /* Background color for the disabled state */
+        color: rgba(0, 0, 0, 0.5); /* Reduced opacity for the text */
+        cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+      }
+
+      #gcodeTextArea {
+        width: 500px;
+        height: 500px;
+        background-color: #000;
+        color: #00ff00;
+        font-family: monospace;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        padding: 1vh;
+        overflow: scroll;
+        white-space: pre-line;
+        line-break: strict;
+      }
+
+      #tableContainer {
+      width: 45vh;
+      height: 70vh;
+      overflow-y: scroll;
+      border: 2px solid #ccc;
+      margin: 1vh;
+      padding: 1vh;
+    }
+
+    .container{
+      display: flex;
+      height: 98vh;
+    }
+
+    .param-box{
+      flex: 1;
+      padding: 5vh;
+      border-right: 2px dashed #00ff0077;
+    }
+
+    .console-box{
+      flex: 1;
+      padding: 5vh;
+    }
+
+    #infoTextArea {
+      background-color: #000;
+      color: #00ff0077;
+      margin: 1vh;
+      width: 45vh;
+      height: 10vh;
+      padding: 1vh;
+      resize: none;
+
+    }
+
+    .user-input{
+      background-color: #000;
+      border: 2px solid #ccc;
+      color: #00ff0077;
+      margin: 1vh;
+      width: 45vh;
+      height: 4vh;
+      padding: 1vh;
+
+    }
+
+    .input-container {
+      position: relative;
+      margin: 2vh;
+    }
+
+    .input-label {
+      position: absolute;
+      background-color: black;
+      border: 2px solid #00ff0077;
+      left: 2.5vh;
+      top: -0.25vh;
+      padding: 0.25vh;
+      width: max-content;
+      font-size: 1.5vh;
+      color: #00ff0077;
+    }
+
+    input::placeholder{
+      color: slategray;
+    }
+
+    #preFilterInput:focus{
+      border-color: #00ff0077;
+      color: #00ff0099;
+    }
+
+    input:focus{
+      border-color: #00ff0077;
+      outline: none;
+    }
+
+    #paramBox{
+      width: 50vh;
+      height: 70vh;
+      border: 2px solid white;
+    }
+
+ 
+
+    .loading-dot-container {
+            display: flex;
+            justify-content: center; /* Center the dots horizontally */
+            align-items: center; /* Center the dots vertically */
+            position: fixed; /* Required for positioning the dots */
+            top: 50%; /* Position the container at the vertical center */
+            left: 50%; /* Position the container at the horizontal center */
+            transform: translate(-50%, -50%); /* Adjust to center the container */
+            width: 20px; /* Width of the triangle */
+            height: 20px; /* Height of the triangle */
+        }
+
+        .loading-dot-3 {
+            animation: loading-dot-animation .8s infinite;
+            animation-delay: .66s; /* First dot starts after 1 second */
+            top: -32px; /* Position the third dot above the center */
+            left: -12px; /* Position the third dot to the right of the center */
+
+        }
+
+        .loading-dot-2 {
+            animation: loading-dot-animation .8s infinite;
+            animation-delay: .33s; /* Second dot starts after 0.5 seconds */
+             top: 32px; /* Position the second dot below the center */
+            left: -12px; /* Position the second dot to the left of the center */
+
+        }
+
+        .loading-dot-1 {
+            animation: loading-dot-animation .8s infinite;
+            animation-delay: 0s; /* Third dot starts immediately */
+            top: 0px; /* Position the first dot below the center */
+            left: 16px; /* Position the first dot to the right of the center */
+
+        }
+
+        .loading-dot {
+          width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #00ff00; /* Use white color for the dots */
+            display: inline-block;
+            opacity: 0;
+            position: absolute; /* Position the dots absolutely within the container */
+        }
+
+.fade-out {
+  animation: fade-out-animation 1.6s ease-out forwards;
+}
+
+@keyframes fade-out-animation {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+        @keyframes loading-dot-animation {
+            0% {
+                opacity: 100%;
+            }
+            100% {
+                opacity: 0%;
+            }
+        }
+
+
+      .table {
+      color: #00ff0099;
+      background-color: #000;
+      border-color: 2px solid white;
+      font-family: monospace;
+      font-size: 14px;
+      border-collapse: collapse;
+    }
+
+    td {
+      padding: 5px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .layer-change-highlight-go {
+      background-color: #00ff0077;
+      color: #fff;
+    }
+
+    .layer-change-highlight-no-go{
+      background-color: rgb(149, 0, 0);
+      color: #fff;
+    }
+
+    .selected-line {
+      background-color: #00ff0077;
+      color: #fff;
+    }
+
+    canvas {
+      border: 1px solid white;
+    }
+    
+    </style>
+  </head>
+  <body style="background-color: black;">
+    <script type="module" src="gcodePostProcessorJavascript.js"></script>
+    <script type="module" src="gcodePostProcessorInputFile.js"></script>
+
+
+
+    <div class="container">
+
+      <div class="param-box">
+        <span style="margin-top: 10px; margin-bottom: 10px;">
+          <input type="file" id="openFileButtonId" disabled onchange="startProcessing(event)"/>
+          <span style="margin-right: 10px; width: 100px; height: 30px;"><button id="compareButton" type="input" disabled>SELECT LINES</button></span>
+          <span style="margin-right: 10px; width: 100px; height: 30px;"><button id="refreshButton" type="input" disabled>REFRESH Z LINES</button></span>
+        </span>
+
+        <div class="input-container">
+          <input type="text" id="preFilterInput" class="user-input" placeholder='A string to filter the file by, example: "Z", ";layer change"'/>
+          <label for="preFilterInput" class= "input-label">Pre-filter Gcode</label>
+        </div>
+
+        <div class="input-container">
+          <input type="text" id="pillarWidthInput" class="user-input" placeholder='An integer representing diameter of reinforcement pillar in mm'/>
+          <label for="pillarWidthInput" class= "input-label">Pillar Width</label>
+        </div>
+
+        <div class="input-container">
+          <input type="text" id="pillarHeightInput" class="user-input" placeholder='A number representing vertical height of reinforcement pillar in mm'/>
+          <label for="pillarHeightInput" class= "input-label">Pillar Height</label>
+        </div>
+
+        <div class="input-container">
+          <input type="text" id="pillarDensityInput" class="user-input" placeholder='An integer representing density percentage of reinforcement pillars along a line segment'/>
+          <label for="pillarDensityInput" class= "input-label">Pillar Density</label>
+        </div>
+
+
+      </div>
+
+      
+    
+
+
+    <div class="console-box">
+      <div>
+        <textarea disabled="true" id="infoTextArea"></textarea>
+      </div>
+
+      <div id="tableContainer">
+        <table id="gcodeTable" class="table"></table>
+          <div class="loading-dot-container" id="loadingDotsContainer" style="display: none">
+            <div class="loading-dot loading-dot-1"></div>
+            <div class="loading-dot loading-dot-2"></div>
+            <div class="loading-dot loading-dot-3"></div>
+          </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+    </body>
+</html>
