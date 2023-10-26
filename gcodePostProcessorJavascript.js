@@ -371,11 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("preFilterInput")
     .addEventListener("input", handlePreFilterInput);
-  document.getElementsByTagName("canvas")[0].addEventListener("click", () => {
-    rotationAngle += 1;
-    drawLines();
-  });
+
   document.getElementById("infoTextArea").value =
     "Pre-filter string must be specified" + "\n";
-  drawLines();
 });
