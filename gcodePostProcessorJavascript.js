@@ -212,6 +212,10 @@ function changeTablesRowsToDefault() {
   }
 }
 
+function getLayerChangeIndices(){
+  return layerChangeIndices;
+}
+
 function updateGcodeTableWithLayerChanges() {
   let currentGcodeTableInnerText = getCurrentGcodeTable();
   let layerChangePattern = getSelectedLinesPattern();
@@ -254,7 +258,7 @@ function updateGcodeTableWithLayerChanges() {
       }
       layerChangeTableIndex++;
     }
-
+    console.log(newGcodeTableArray);
     sendInfoToTextArea(
       `Matching complete, total lines matched: ${numberOfMatches}`,
       document.getElementById("infoTextArea")

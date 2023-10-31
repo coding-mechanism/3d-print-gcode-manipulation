@@ -78,7 +78,7 @@ const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB in bytes
         const filteredGcode = [];
         for(let index = 0; index < gcode.length; index++){
             if(gcode[index].match(re)){
-                filteredGcode.push(gcode[index]);
+                filteredGcode.push({gcodeArrayIndex: index, gcodeLine: gcode[index]});
             }
         }
         return filteredGcode;
@@ -124,8 +124,10 @@ const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB in bytes
         data.forEach((line, index) => {
           const row = table.insertRow();
           const cell = row.insertCell();
-          cell.innerHTML = line;
-          cell.value = index;
+          cell.innerHTML = line.gcodeLine;
+          cell.value = line.gcodeArrayIndex;
+          console.log(cell.value);
+
           // Add a click event listener to the row to handle the click
           row.addEventListener("click", (event) => {
             // Here you can perform any action you want when a row is clicked
