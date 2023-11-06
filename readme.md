@@ -1,6 +1,3 @@
-Certainly! Below is a template for a `README.md` file summarizing the functionality of the provided code. This template assumes that the project is a G-code processing tool for 3D printing or CNC machining, which seems to be the context based on the code snippets.
-
-```markdown
 # G-Code Post-Processor
 
 ## Overview
@@ -60,7 +57,6 @@ git clone https://github.com/c0rdurb0y/3d-print-gcode-manipulation
 cd 3d-print-gcode-manipulation
 open index.html
 ```
-
 ## Contributing
 
 Contributions to the G-code Post-Processor are welcome. Please fork the repository, make your changes, and submit a pull request.
