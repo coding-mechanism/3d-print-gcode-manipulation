@@ -51,7 +51,6 @@ class Layer {
     this.layerGcode = this.getLayerGcode();
     this.listOfAllPolygonsInLayer = [];
     this.processLayerGcode(this.layerGcode);
-    console.log(this.listOfAllPolygonsInLayer);
   }
 
   getLayerGcode() {
@@ -118,8 +117,8 @@ class Layer {
           "^Y[0-9]+\\.[0-9]+$"
         );
         polygonCoordinatePoints.push([
-          parseFloat(currentG0_X),
-          parseFloat(currentG0_Y),
+          parseFloat(currentG1_X),
+          parseFloat(currentG1_Y),
         ]);
       }
 
@@ -129,9 +128,36 @@ class Layer {
         currentG0_X !== -1 &&
         currentG0_Y !== -1
       ) {
-        this.listOfAllPolygonsInLayer.push(polygonCoordinatePoints);
+        this.listOfAllPolygonsInLayer.push(
+          new Polygon(polygonCoordinatePoints)
+        );
       }
     }
+  }
+}
+
+class Polygon {
+  constructor(pointList) {
+    this.points = this.createPoints(pointList);
+  }
+
+  createPoints(pointList) {
+    let pointObjectList = [];
+    for (let pointIndex = 0; pointIndex < pointList.length; pointIndex++) {
+      let newPoint = new Point(
+        pointList[pointIndex][0],
+        pointList[pointIndex][1]
+      );
+      pointObjectList.push(newPoint);
+    }
+    return pointObjectList;
+  }
+}
+
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
   }
 }
 
@@ -390,13 +416,11 @@ class GcodeProcessor {
 
     return firstLinePreviousChars;
   }
-
 }
 
 const gcodeProcessor = new GcodeProcessor();
 
 document.addEventListener("DOMContentLoaded", () => {
-
   document.getElementById("compareButton").addEventListener("click", () => {
     gcodeProcessor.updateGcodeTableWithLayerChanges();
   });
