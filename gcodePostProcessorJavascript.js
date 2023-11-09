@@ -139,18 +139,101 @@ class Layer {
 class Polygon {
   constructor(pointList) {
     this.points = this.createPoints(pointList);
+    this.area = this.findAreaOfPolygon(this.points);
+  }
+
+  findAreaOfPolygon(polygon) {
+    //Gauss' shoelace formula
+    let polygonArea = 0;
+    for (let index = 0; index < polygon.length; index++) {
+      // Break if it's the last vertex
+      if (index === polygon.length - 1) {
+        break;
+      }
+      const currentX = polygon[index].x;
+      const currentY = polygon[index].y;
+      const nextX = polygon[index + 1].x;
+      const nextY = polygon[index + 1].y;
+      polygonArea += currentX * nextY - currentY * nextX;
+    }
+    return Math.abs(polygonArea / 2);
   }
 
   createPoints(pointList) {
-    let pointObjectList = [];
-    for (let pointIndex = 0; pointIndex < pointList.length; pointIndex++) {
-      let newPoint = new Point(
-        pointList[pointIndex][0],
-        pointList[pointIndex][1]
-      );
-      pointObjectList.push(newPoint);
+    return pointList.map(([x, y]) => new Point(x, y));
+  }
+
+  isPointInsidePolygon(point) {
+    let minX = this.points[0].x;
+    let maxX = this.points[0].x;
+    let minY = this.points[0].y;
+    let maxY = this.points[0].y;
+
+    this.points.forEach((p) => {
+      minX = Math.min(p.x, minX);
+      maxX = Math.max(p.x, maxX);
+      minY = Math.min(p.y, minY);
+      maxY = Math.max(p.y, maxY);
+    });
+
+    let numberOfIntersections = 0;
+    for (let i = 0; i < this.points.length; i++) {
+      let nextIndex = (i + 1) % this.points.length;
+      let lineSegment = [this.points[i], this.points[nextIndex]];
+      if (lineSegment[0].x > point.x || lineSegment[1].x > point.x) {
+        if (
+          this.doLinesIntersect(lineSegment, [
+            point,
+            new Point(maxX + 1, point.y),
+          ])
+        ) {
+          numberOfIntersections++;
+        }
+      }
     }
-    return pointObjectList;
+    return numberOfIntersections % 2 !== 0;
+  }
+
+  doLinesIntersect(line1, line2) {
+    const orientation = (p, q, r) => {
+      const val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+      if (val === 0) return 0; // collinear
+      return val > 0 ? 1 : 2; // clock or counterclock wise
+    };
+
+    const onSegment = (p, q, r) => {
+      return (
+        q.x <= Math.max(p.x, r.x) &&
+        q.x >= Math.min(p.x, r.x) &&
+        q.y <= Math.max(p.y, r.y) &&
+        q.y >= Math.min(p.y, r.y)
+      );
+    };
+
+    const p1 = line1[0];
+    const q1 = line1[1];
+    const p2 = line2[0];
+    const q2 = line2[1];
+
+    const o1 = orientation(p1, q1, p2);
+    const o2 = orientation(p1, q1, q2);
+    const o3 = orientation(p2, q2, p1);
+    const o4 = orientation(p2, q2, q1);
+
+    if (o1 !== o2 && o3 !== o4) return true;
+
+    if (o1 === 0 && onSegment(p1, p2, q1)) return true;
+    if (o2 === 0 && onSegment(p1, q2, q1)) return true;
+    if (o3 === 0 && onSegment(p2, p1, q2)) return true;
+    if (o4 === 0 && onSegment(p2, q1, q2)) return true;
+
+    return false;
+  }
+
+  checkIfPolygonIsInPolygon(otherPolygon) {
+    return this.points.every((point) =>
+      otherPolygon.isPointInsidePolygon(point)
+    );
   }
 }
 
