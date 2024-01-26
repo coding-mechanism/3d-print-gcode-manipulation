@@ -20,7 +20,7 @@ _Demo_: Experience the tool in action [here](https://coding-mechanism.github.io/
 
 **or**
 
-1. Clone the repository: `git clone https://github.com/c0rdurb0y/3d-print-gcode-manipulation.git`
+1. Clone the repository: `git clone https://github.com/coding-mechanism/3d-print-gcode-manipulation.git`
 2. Navigate to the project directory: `cd 3d-print-gcode-manipulation`
 3. Open the `index.html` file in your browser. or for the terminal:
     - **Windows**: `start index.html`
