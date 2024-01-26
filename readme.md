@@ -16,7 +16,7 @@ This tool elevates the durability of 3D printed objects by intelligently creatin
 - **Enhanced Structural Integrity**: Focuses on reinforcing areas susceptible to shear stress, thereby improving the object's overall strength.
 
 ## Installation and Setup
-_Demo_: Experience the tool in action [here](https://c0rdurb0y.github.io/3d-print-gcode-manipulation/)
+_Demo_: Experience the tool in action [here](https://coding-mechanism.github.io/3d-print-gcode-manipulation/)
 
 **or**
 
